@@ -33,7 +33,7 @@ def setup_platform(hass, config, add_devices, discovery_info=None):
         _LOGGER.info("Found %s hosts", len(hosts))
 
         for host in hosts:
-            _LOGGER.info("Added host %s", len(host))
+            _LOGGER.info("Added host %s", host)
             led_ball_lights.append(LedBallLight(host, counter))
             counter = counter + 1
 
@@ -66,10 +66,12 @@ class LedBallLight(Light):
         return self._state
 
     def send_command(self, command):
+        _LOGGER.debug("host %s: CMD: %s", self._name, command)
         conn = http.client.HTTPConnection(self._host)
         conn.request("GET", "/" + command)
         response = conn.getresponse()
         data = response.read()
+        _LOGGER.debug("host %s: RSP: %s", self._name, data)
         conn.close()
         return data
 

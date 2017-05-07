@@ -98,4 +98,5 @@ class LedBallLight(Light):
         """Fetch new state data for this light.
         This is the only method that should fetch new data for Home Assistant.
         """
+        _LOGGER.debug("update %s", self._name)
         self._state = (self.send_command("state") == "ON")

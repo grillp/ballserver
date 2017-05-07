@@ -20,22 +20,49 @@ formatter = logging.Formatter('%(asctime)s %(levelname)-8s %(message)s')
 handler.setFormatter(formatter)
 logger.addHandler(handler)
 
+class LEDBall():
+    def __init__(self):
+        self._on = False
+        powerOff()
+
+    def send_ir_command(command):
+        call(["/usr/bin/irsend", "SEND_ONCE", "ledball", command]);
+
+    def powerOn():
+        send_ir_command("KEY_POWER");
+        self._on = True
+
+    def powerOff():
+        send_ir_command("KEY_OFF");
+        self._on = False
+
+    def isOn():
+        return self._on
+
+    def red():
+        send_ir_command("KEY_POWER");
+        sleep(COMMAND_DELAY)
+        send_ir_command("KEY_RED");
+
+    def yellow():
+        send_ir_command("KEY_POWER");
+        sleep(COMMAND_DELAY)
+        send_ir_command("KEY_YELLOW");
+
+    def brightness():
+        send_ir_command("KEY_POWER");
+        sleep(COMMAND_DELAY)
+        send_ir_command("KEY_BRIGHTNESS_CYCLE");
+
+    def cycle():
+        send_ir_command("KEY_POWER");
+        sleep(COMMAND_DELAY)
+        send_ir_command("KEY_CYCLEWINDOWS");
+
 def response(message=""):
   if message != "":
     message = message + "</br>"
   return "<html>" + message + "<a href='/on'>ON</a><br/><a href='/off'>OFF</a><br/><a href='/red'>RED</a><br/><a href='/yellow'>YELLOW</a><br/><a href='/brightness'>BRIGHTNESS</a><br/><a href='/colours'>COLOURS</a></html>"
-
-isBallOn = False
-def setBallOnState(state):
-    isBallOn = state
-    logger.info("setBallOnState = " + isBallOn)
-
-def getBallOnState():
-    logger.info("getBallOnState = " + isBallOn)
-    return isBallOn
-
-def send_ir_command(command):
-    call(["/usr/bin/irsend", "SEND_ONCE", "ledball", command]);
 
 class WebRoot(Resource):
     # isLeaf = True
@@ -49,54 +76,57 @@ class WebRoot(Resource):
 
 class BallOn(Resource):
     isLeaf = True
-    setBallOnState(True)
+    def __init__(self, ledball)
+        self._ledball = ledball
     def render_GET(self, Request):
-        send_ir_command("KEY_POWER");
+        self._ledball.powerOn()
     	return response("Ball On - OK")
 
 class BallOff(Resource):
     isLeaf = True
-    setBallOnState(False)
+    def __init__(self, ledball)
+        self._ledball = ledball
     def render_GET(self, Request):
-        send_ir_command("KEY_OFF");
+        self._ledball.powerOff()
         return response("Ball Off - OK")
 
 class BallRed(Resource):
     isLeaf = True
+    def __init__(self, ledball)
+        self._ledball = ledball
     def render_GET(self, Request):
-        send_ir_command("KEY_POWER");
-        sleep(COMMAND_DELAY)
-        send_ir_command("KEY_RED");
+        self._ledball.red()
         return response("Ball Red - OK")
 
 class BallYellow(Resource):
     isLeaf = True
+    def __init__(self, ledball)
+        self._ledball = ledball
     def render_GET(self, Request):
-        send_ir_command("KEY_POWER");
-        sleep(COMMAND_DELAY)
-        send_ir_command("KEY_YELLOW");
+        self._ledball.yellow()
         return response("Ball Yellow - OK")
+
+class BallColourCycle(Resource):
+    def __init__(self, ledball)
+        self._ledball = ledball
+    def render_GET(self, Request):
+        self._ledball.brightness()
+        return response("Brightness - OK")
 
 class BallBrightness(Resource):
     isLeaf = True
+    def __init__(self, ledball)
+        self._ledball = ledball
     def render_GET(self, Request):
-        send_ir_command("KEY_POWER");
-        sleep(COMMAND_DELAY)
-        send_ir_command("KEY_BRIGHTNESS_CYCLE");
-        return response("Brightness - OK")
-
-class BallColourCycle(Resource):
-    isLeaf = True
-    def render_GET(self, Request):
-        send_ir_command("KEY_POWER");
-        sleep(COMMAND_DELAY)
-        send_ir_command("KEY_CYCLEWINDOWS");
+        self._ledball.cycle()
         return response("Colour Cycle - OK")
 
 class BallState(Resource):
     isLeaf = True
+    def __init__(self, ledball)
+        self._ledball = ledball
     def render_GET(self, Request):
-        return "ON" if getBallOnState() else "OFF"
+        return "ON" if self._ledball.isOn() else "OFF"
 
 logger.info("Setting up Web Server..")
 
@@ -108,10 +138,6 @@ web_root.putChild("yellow", BallYellow())
 web_root.putChild("brightness", BallBrightness())
 web_root.putChild("colours", BallColourCycle())
 web_root.putChild("state", BallState())
-
-# turn ball off
-isBallOn = False
-send_ir_command("KEY_OFF");
 
 logger.info("Setting up Site")
 site = server.Site(web_root)

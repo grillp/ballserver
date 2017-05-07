@@ -33,31 +33,31 @@ class LEDBall():
         self._on = True
 
     def powerOff(self):
-        send_ir_command("KEY_OFF");
+        self.send_ir_command("KEY_OFF");
         self._on = False
 
     def isOn(self):
         return self._on
 
     def red(self):
-        send_ir_command("KEY_POWER");
+        self.send_ir_command("KEY_POWER");
         sleep(COMMAND_DELAY)
-        send_ir_command("KEY_RED");
+        self.send_ir_command("KEY_RED");
 
     def yellow(self):
-        send_ir_command("KEY_POWER");
+        self.send_ir_command("KEY_POWER");
         sleep(COMMAND_DELAY)
-        send_ir_command("KEY_YELLOW");
+        self.send_ir_command("KEY_YELLOW");
 
     def brightness(self):
-        send_ir_command("KEY_POWER");
+        self.send_ir_command("KEY_POWER");
         sleep(COMMAND_DELAY)
-        send_ir_command("KEY_BRIGHTNESS_CYCLE");
+        self.send_ir_command("KEY_BRIGHTNESS_CYCLE");
 
     def cycle(self):
-        send_ir_command("KEY_POWER");
+        self.send_ir_command("KEY_POWER");
         sleep(COMMAND_DELAY)
-        send_ir_command("KEY_CYCLEWINDOWS");
+        self.send_ir_command("KEY_CYCLEWINDOWS");
 
 def response(message=""):
   if message != "":

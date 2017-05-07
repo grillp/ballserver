@@ -86,14 +86,16 @@ class LedBallLight(Light):
 
     def turn_on(self, **kwargs):
         """Instruct the light to turn on."""
+        _LOGGER.debug("turn_on %s", self._name)
         self.send_command("on")
 
     def turn_off(self, **kwargs):
         """Instruct the light to turn off."""
+        _LOGGER.debug("turn_off %s", self._name)
         self.send_command("off")
 
     def update(self):
         """Fetch new state data for this light.
         This is the only method that should fetch new data for Home Assistant.
         """
-        self._state = (self.send_command("state") == b"ON")
+        self._state = (self.send_command("state") == "ON")

@@ -10,6 +10,8 @@ from time import sleep
 
 COMMAND_DELAY=0.4
 
+ballOn = False
+
 def response(message=""):
   if message != "":
     message = message + "</br>"
@@ -30,12 +32,14 @@ class WebRoot(Resource):
 
 class BallOn(Resource):
     isLeaf = True
+    ballOn = True
     def render_GET(self, Request):
         send_ir_command("KEY_POWER");
     	return response("Ball On - OK")
 
 class BallOff(Resource):
     isLeaf = True
+    ballOn = False
     def render_GET(self, Request):
         send_ir_command("KEY_OFF");
         return response("Ball Off - OK")
@@ -72,6 +76,11 @@ class BallColourCycle(Resource):
         send_ir_command("KEY_CYCLEWINDOWS");
         return response("Colour Cycle - OK")
 
+class BallState(Resource):
+    isLeaf = True
+    def render_GET(self, Request):
+        return response(BallState ? "ON" : "OFF")
+
 LOG_FILENAME = "/tmp/myservice.log"
 LOG_LEVEL = logging.INFO
 logger = logging.getLogger(__name__)
@@ -90,6 +99,11 @@ web_root.putChild("red", BallRed())
 web_root.putChild("yellow", BallYellow())
 web_root.putChild("brightness", BallBrightness())
 web_root.putChild("colours", BallColourCycle())
+web_root.putChild("state", BallState())
+
+# turn ball off
+ballOn = False
+send_ir_command("KEY_OFF");
 
 logger.info("Setting up Site")
 site = server.Site(web_root)
@@ -99,4 +113,3 @@ endpoint.listen(site)
 logger.info("runnign reactor")
 reactor.run()
 logger.info("Terminating")
-

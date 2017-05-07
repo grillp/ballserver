@@ -40,7 +40,7 @@ class LedBallLight(Light):
         """Initialize an LED Ball Light."""
         self._host = host
         self._id = id
-        self._name = "LED Ball Light " + id
+        self._name = "LED Ball Light " + str(id)
         self._state = None
         self._brightness = None
 

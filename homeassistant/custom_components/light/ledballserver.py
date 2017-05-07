@@ -21,6 +21,8 @@ def setup_platform(hass, config, add_devices, discovery_info=None):
 
     hosts = config.get(CONF_HOSTS)
 
+    _LOGGER.info("Setting up..")
+
     if hosts:
         # Support retro compatibility with comma separated list of hosts
         # from config
@@ -28,9 +30,13 @@ def setup_platform(hass, config, add_devices, discovery_info=None):
         hosts = hosts.split(',') if isinstance(hosts, str) else hosts
         led_ball_lights = []
         counter = 0
+        _LOGGER.info("Found %s hosts", len(hosts))
+
         for host in hosts:
+            _LOGGER.info("Added host %s", len(host))
             led_ball_lights.append(LedBallLight(host, counter))
             counter = counter + 1
+
         add_devices(led_ball_lights)
 
 class LedBallLight(Light):

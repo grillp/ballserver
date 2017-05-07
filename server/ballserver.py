@@ -130,14 +130,15 @@ class BallState(Resource):
 
 logger.info("Setting up Web Server..")
 
+ledball = LEDBall()
 web_root = WebRoot()
-web_root.putChild("on", BallOn())
-web_root.putChild("off", BallOff())
-web_root.putChild("red", BallRed())
-web_root.putChild("yellow", BallYellow())
-web_root.putChild("brightness", BallBrightness())
-web_root.putChild("colours", BallColourCycle())
-web_root.putChild("state", BallState())
+web_root.putChild("on", BallOn(ledball))
+web_root.putChild("off", BallOff(ledball))
+web_root.putChild("red", BallRed(ledball))
+web_root.putChild("yellow", BallYellow(ledball))
+web_root.putChild("brightness", BallBrightness(ledball))
+web_root.putChild("colours", BallColourCycle(ledball))
+web_root.putChild("state", BallState(ledball))
 
 logger.info("Setting up Site")
 site = server.Site(web_root)

@@ -11,6 +11,15 @@ from time import sleep
 COMMAND_DELAY=0.4
 
 
+LOG_FILENAME = "/tmp/myservice.log"
+LOG_LEVEL = logging.INFO
+logger = logging.getLogger(__name__)
+logger.setLevel(LOG_LEVEL)
+handler = logging.handlers.TimedRotatingFileHandler(LOG_FILENAME, when="midnight", backupCount=3)
+formatter = logging.Formatter('%(asctime)s %(levelname)-8s %(message)s')
+handler.setFormatter(formatter)
+logger.addHandler(handler)
+
 def response(message=""):
   if message != "":
     message = message + "</br>"
@@ -19,8 +28,10 @@ def response(message=""):
 isBallOn = False
 def setBallOnState(state):
     isBallOn = state
+    logger.info("setBallOnState = " + isBallOn)
 
 def getBallOnState():
+    logger.info("getBallOnState = " + isBallOn)
     return isBallOn
 
 def send_ir_command(command):
@@ -86,15 +97,6 @@ class BallState(Resource):
     isLeaf = True
     def render_GET(self, Request):
         return "ON" if getBallOnState() else "OFF"
-
-LOG_FILENAME = "/tmp/myservice.log"
-LOG_LEVEL = logging.INFO
-logger = logging.getLogger(__name__)
-logger.setLevel(LOG_LEVEL)
-handler = logging.handlers.TimedRotatingFileHandler(LOG_FILENAME, when="midnight", backupCount=3)
-formatter = logging.Formatter('%(asctime)s %(levelname)-8s %(message)s')
-handler.setFormatter(formatter)
-logger.addHandler(handler)
 
 logger.info("Setting up Web Server..")
 

@@ -47,7 +47,7 @@ class LedBallLight(Light):
         self._host = host
         self._id = id
         self._name = "LED Ball Light " + str(id)
-        self._state = None
+        self._state = False
         self._brightness = None
 
     @property

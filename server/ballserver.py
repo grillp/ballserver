@@ -79,7 +79,7 @@ class BallColourCycle(Resource):
 class BallState(Resource):
     isLeaf = True
     def render_GET(self, Request):
-        return response(BallState ? "ON" : "OFF")
+        return response("ON" if BallState else "OFF")
 
 LOG_FILENAME = "/tmp/myservice.log"
 LOG_LEVEL = logging.INFO

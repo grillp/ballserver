@@ -74,7 +74,7 @@ class LedBallLight(Light):
         data = response.read()
         _LOGGER.debug("host %s: RSP: %s", self._name, data)
         conn.close()
-        return str(data).decode('utf-8')
+        return data
 
 # def send_command(command):
 #     conn = http.client.HTTPConnection("rasp-3:8080")
@@ -99,4 +99,4 @@ class LedBallLight(Light):
         This is the only method that should fetch new data for Home Assistant.
         """
         _LOGGER.debug("update %s", self._name)
-        self._state = (self.send_command("state") == "ON")
+        self._state = (self.send_command("state") == b'ON')

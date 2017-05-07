@@ -28,33 +28,33 @@ class LEDBall():
     def send_ir_command(command):
         call(["/usr/bin/irsend", "SEND_ONCE", "ledball", command]);
 
-    def powerOn():
+    def powerOn(self):
         send_ir_command("KEY_POWER");
         self._on = True
 
-    def powerOff():
+    def powerOff(self):
         send_ir_command("KEY_OFF");
         self._on = False
 
-    def isOn():
+    def isOn(self):
         return self._on
 
-    def red():
+    def red(self):
         send_ir_command("KEY_POWER");
         sleep(COMMAND_DELAY)
         send_ir_command("KEY_RED");
 
-    def yellow():
+    def yellow(self):
         send_ir_command("KEY_POWER");
         sleep(COMMAND_DELAY)
         send_ir_command("KEY_YELLOW");
 
-    def brightness():
+    def brightness(self):
         send_ir_command("KEY_POWER");
         sleep(COMMAND_DELAY)
         send_ir_command("KEY_BRIGHTNESS_CYCLE");
 
-    def cycle():
+    def cycle(self):
         send_ir_command("KEY_POWER");
         sleep(COMMAND_DELAY)
         send_ir_command("KEY_CYCLEWINDOWS");

@@ -1,4 +1,4 @@
-aimport logging
+import logging
 
 import voluptuous as vol
 import http.client

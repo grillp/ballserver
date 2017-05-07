@@ -29,7 +29,7 @@ class LEDBall():
         call(["/usr/bin/irsend", "SEND_ONCE", "ledball", command]);
 
     def powerOn(self):
-        send_ir_command("KEY_POWER");
+        self.send_ir_command("KEY_POWER");
         self._on = True
 
     def powerOff(self):

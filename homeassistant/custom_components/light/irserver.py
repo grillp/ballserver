@@ -1,7 +1,7 @@
 import logging
 
 import voluptuous as vol
-import httplib
+import http.client
 
 # Import the device class from the component that you want to support
 from homeassistant.components.light import ATTR_BRIGHTNESS, Light, PLATFORM_SCHEMA
@@ -58,11 +58,13 @@ class LedBallLight(Light):
         """
         return self._brightness
 
-    def send_command(command):
-        conn = httplib.HTTPConnection(self._host)
+    def send_command(self, command):
+        conn = http.client.HTTPConnection(self._host)
         conn.request("GET", "/" + command)
-        conn.getresponse()
+        response = conn.getresponse()
+        data = response.read()
         conn.close()
+        return data
 
     @property
     def is_on(self):
@@ -71,14 +73,14 @@ class LedBallLight(Light):
 
     def turn_on(self, **kwargs):
         """Instruct the light to turn on."""
-        send_command("on")
+        self.send_command("on")
 
     def turn_off(self, **kwargs):
         """Instruct the light to turn off."""
-        send_command("off")
+        self.send_command("off")
 
     def update(self):
         """Fetch new state data for this light.
-
         This is the only method that should fetch new data for Home Assistant.
         """
+        self._state = (self.send_command("state") == "ON")

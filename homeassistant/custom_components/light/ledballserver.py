@@ -63,6 +63,7 @@ class LedBallLight(Light):
     @property
     def is_on(self):
         """Return true if light is on."""
+        _LOGGER.debug("is_on %s", self._state)
         return self._state
 
     def send_command(self, command):

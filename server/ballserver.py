@@ -23,7 +23,7 @@ logger.addHandler(handler)
 class LEDBall():
     def __init__(self):
         self._on = False
-        self.powerOff()
+        powerOff()
 
     def send_ir_command(command):
         call(["/usr/bin/irsend", "SEND_ONCE", "ledball", command]);

@@ -1,4 +1,4 @@
-import logging
+aimport logging
 
 import voluptuous as vol
 import http.client
@@ -25,12 +25,12 @@ def setup_platform(hass, config, add_devices, discovery_info=None):
         # Support retro compatibility with comma separated list of hosts
         # from config
         hosts = hosts[0] if len(hosts) == 1 else hosts
-        hosts = hosts.split(',') if isinstance(hosts, str) else hosts
+        hosts = hosts.s plit(',') if isinstance(hosts, str) else hosts
         led_ball_lights = []
         counter = 0
         for host in hosts:
             led_ball_lights.append(LedBallLight(host, counter))
-            counter++
+            counter = counter + 1
         add_devices(led_ball_lights)
 
 class LedBallLight(Light):

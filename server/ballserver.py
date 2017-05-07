@@ -10,12 +10,18 @@ from time import sleep
 
 COMMAND_DELAY=0.4
 
-isBallOn = False
 
 def response(message=""):
   if message != "":
     message = message + "</br>"
   return "<html>" + message + "<a href='/on'>ON</a><br/><a href='/off'>OFF</a><br/><a href='/red'>RED</a><br/><a href='/yellow'>YELLOW</a><br/><a href='/brightness'>BRIGHTNESS</a><br/><a href='/colours'>COLOURS</a></html>"
+
+isBallOn = False
+def setBallOnState(state):
+    isBallOn = state
+
+def getBallOnState():
+    return isBallOn
 
 def send_ir_command(command):
     call(["/usr/bin/irsend", "SEND_ONCE", "ledball", command]);
@@ -32,14 +38,14 @@ class WebRoot(Resource):
 
 class BallOn(Resource):
     isLeaf = True
-    isBallOn = True
+    setBallOnState(True)
     def render_GET(self, Request):
         send_ir_command("KEY_POWER");
     	return response("Ball On - OK")
 
 class BallOff(Resource):
     isLeaf = True
-    isBallOn = False
+    setBallOnState(False)
     def render_GET(self, Request):
         send_ir_command("KEY_OFF");
         return response("Ball Off - OK")
@@ -79,7 +85,7 @@ class BallColourCycle(Resource):
 class BallState(Resource):
     isLeaf = True
     def render_GET(self, Request):
-        return "ON" if isBallOn else "OFF"
+        return "ON" if getBallOnState() else "OFF"
 
 LOG_FILENAME = "/tmp/myservice.log"
 LOG_LEVEL = logging.INFO

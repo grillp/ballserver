@@ -25,7 +25,7 @@ class LEDBall():
         self._on = False
         self.powerOff()
 
-    def send_ir_command(command):
+    def send_ir_command(self, command):
         call(["/usr/bin/irsend", "SEND_ONCE", "ledball", command]);
 
     def powerOn(self):

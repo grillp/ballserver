@@ -6,6 +6,7 @@ from twisted.internet import reactor, endpoints
 from subprocess import call
 import logging
 import logging.handlers
+import json
 from time import sleep
 
 MULTI_COMMAND_DELAY=0.4
@@ -122,8 +123,20 @@ class BallState(Resource):
     isLeaf = True
     def __init__(self, ledball):
         self._ledball = ledball
-    def render_GET(self, Request):
+    def render_GET(self, request):
         return "ON" if self._ledball.isOn() else "OFF"
+
+class BallStateJson(Resource):
+    isLeaf = True
+    def __init__(self, ledball):
+        self._ledball = ledball
+    def render_GET(self, request):
+        state = "ON" if self._ledball.isOn() else "OFF"
+        brightness = str(self._ledball.getBrightness())
+        data = json.dumps({'state': state, 'brightness': brightness})
+        request.setHeader('Content-Type', 'application/json')
+        request.write(data)
+        request.finish()
 
 logger.info("Setting up Web Server..")
 
@@ -136,6 +149,7 @@ web_root.putChild("yellow", BallYellow(ledball))
 web_root.putChild("brightness", BallBrightness(ledball))
 web_root.putChild("colours", BallColourCycle(ledball))
 web_root.putChild("state", BallState(ledball))
+web_root.putChild("state.json", BallState(ledball))
 
 logger.info("Setting up Site")
 site = server.Site(web_root)

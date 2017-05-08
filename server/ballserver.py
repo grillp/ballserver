@@ -21,10 +21,17 @@ formatter = logging.Formatter('%(asctime)s %(levelname)-8s %(message)s')
 handler.setFormatter(formatter)
 logger.addHandler(handler)
 
+colors = {
+    'yellow': (255, 255, 0),
+    'red': (255, 0, 0),
+}
+
 class LEDBall():
     def __init__(self):
         self._on = False
         self._brightness = 0
+        self._color = None
+        self.yellow()
         self.powerOff()
 
     def send_ir_command(self, command):

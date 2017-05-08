@@ -112,14 +112,14 @@ class BallYellow(Resource):
         self._ledball.yellow()
         return response("Ball Yellow - OK")
 
-class BallColourCycle(Resource):
+class BallBrightness(Resource):
     def __init__(self, ledball):
         self._ledball = ledball
     def render_GET(self, Request):
         self._ledball.brightness()
         return response("Brightness - OK")
 
-class BallBrightness(Resource):
+class BallColourCycle(Resource):
     isLeaf = True
     def __init__(self, ledball):
         self._ledball = ledball

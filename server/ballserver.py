@@ -54,9 +54,11 @@ class LEDBall():
         self._brightness = 0
 
     def red(self):
+        self._color = 'red'
         self.powerOnPlusCommand("KEY_RED")
 
     def yellow(self):
+        self._color = 'yellow'
         self.powerOnPlusCommand("KEY_YELLOW")
 
     def brightness(self):
@@ -72,10 +74,24 @@ class LEDBall():
     def getBrightness(self):
         return self._brightness;
 
+    def getColor(self):
+        return self._color
+
 def response(message=""):
-  if message != "":
-    message = message + "</br>"
-  return "<html>" + message + "<a href='/on'>ON</a><br/><a href='/off'>OFF</a><br/><a href='/red'>RED</a><br/><a href='/yellow'>YELLOW</a><br/><a href='/brightness'>BRIGHTNESS</a><br/><a href='/colours'>COLOURS</a></html>"
+    if message != "":
+        message = message + "</br>"
+    return "<html>" + message + "<a href='/on'>ON</a><br/><a href='/off'>OFF</a><br/><a href='/red'>RED</a><br/><a href='/yellow'>YELLOW</a><br/><a href='/brightness'>BRIGHTNESS</a><br/><a href='/colours'>COLOURS</a></html>"
+
+def rendersStateResponse(request, ledball):
+    state = "ON" if ledball.isOn() else "OFF"
+    brightness = str(ledball.getBrightness())
+    color = colors[ledball.getColor()]
+    data = json.dumps({'state': state, 'brightness': brightness, 'color': color})
+    request.setHeader('Content-Type', 'application/json')
+    request.write(data)
+    request.finish()
+    return server.NOT_DONE_YET
+
 
 class WebRoot(Resource):
     # isLeaf = True
@@ -93,7 +109,7 @@ class BallOn(Resource):
         self._ledball = ledball
     def render_GET(self, Request):
         self._ledball.powerOn()
-    	return response("Ball On - OK")
+    	return rendersStateResponse(request, self._ledball)
 
 class BallOff(Resource):
     isLeaf = True
@@ -101,7 +117,7 @@ class BallOff(Resource):
         self._ledball = ledball
     def render_GET(self, Request):
         self._ledball.powerOff()
-        return response("Ball Off - OK")
+        return rendersStateResponse(request, self._ledball)
 
 class BallRed(Resource):
     isLeaf = True
@@ -109,7 +125,7 @@ class BallRed(Resource):
         self._ledball = ledball
     def render_GET(self, Request):
         self._ledball.red()
-        return response("Ball Red - OK")
+        return rendersStateResponse(request, self._ledball)
 
 class BallYellow(Resource):
     isLeaf = True
@@ -117,14 +133,14 @@ class BallYellow(Resource):
         self._ledball = ledball
     def render_GET(self, Request):
         self._ledball.yellow()
-        return response("Ball Yellow - OK")
+        return rendersStateResponse(request, self._ledball)
 
 class BallBrightness(Resource):
     def __init__(self, ledball):
         self._ledball = ledball
     def render_GET(self, Request):
         self._ledball.brightness()
-        return response("Brightness - OK")
+        return rendersStateResponse(request, self._ledball)
 
 class BallColourCycle(Resource):
     isLeaf = True
@@ -132,7 +148,7 @@ class BallColourCycle(Resource):
         self._ledball = ledball
     def render_GET(self, Request):
         self._ledball.cycle()
-        return response("Colour Cycle - OK")
+        return rendersStateResponse(request, self._ledball)
 
 class BallState(Resource):
     isLeaf = True
@@ -146,13 +162,7 @@ class BallStateJson(Resource):
     def __init__(self, ledball):
         self._ledball = ledball
     def render_GET(self, request):
-        state = "ON" if self._ledball.isOn() else "OFF"
-        brightness = str(self._ledball.getBrightness())
-        data = json.dumps({'state': state, 'brightness': brightness})
-        request.setHeader('Content-Type', 'application/json')
-        request.write(data)
-        request.finish()
-        return server.NOT_DONE_YET
+        return rendersStateResponse(request, self._ledball)
 
 logger.info("Setting up Web Server..")
 

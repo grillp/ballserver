@@ -94,14 +94,14 @@ class LedBallLight(Light):
         conn.close()
         return data.decode('utf-8')
 
-# import http.client
-# def send_command(command):
-#     conn = http.client.HTTPConnection("rasp-3:8080")
-#     conn.request("GET", "/" + command)
-#     response = conn.getresponse()
-#     data = response.read()
-#     conn.close()
-#     return data.decode('utf-8')
+import http.client
+def send_command(command):
+    conn = http.client.HTTPConnection("rasp-3:8080")
+    conn.request("GET", "/" + command)
+    response = conn.getresponse()
+    data = response.read()
+    conn.close()
+    return data.decode('utf-8')
 
     def turn_on(self, **kwargs):
         """Instruct the light to turn on."""
@@ -112,7 +112,7 @@ class LedBallLight(Light):
         if ATTR_BRIGHTNESS in kwargs:
             color_rgb = kwargs[ATTR_BRIGHTNESS]
             _LOGGER.debug("turn_on %s : brightness=%s", self._name, kwargs[ATTR_BRIGHTNESS])
-            if abs(color[0] - color[1]) > 100):
+            if abs(color_rgb[0] - color_rgb[1]) > 100):
                 self.send_command("red")
             else:
                 self.send_command("yellow")

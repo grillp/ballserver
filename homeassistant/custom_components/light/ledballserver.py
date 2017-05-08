@@ -54,10 +54,7 @@ class LedBallLight(Light):
         self._name = "LED Ball Light " + str(id)
         self._state = False
         self._brightness = None
-        red = int(1 * BYTE_MAX)
-        green = 0
-        blue = 0
-        self._rgb = [red, green, blue]
+        self._rgb = [0,0,0]
 
     @property
     def supported_features(self):
@@ -116,7 +113,8 @@ def send_command(command):
         if ATTR_RGB_COLOR in kwargs:
             color_rgb=kwargs[ATTR_RGB_COLOR]
             _LOGGER.debug("turn_on %s : color=%s", self._name, color_rgb)
-            if (abs(color_rgb[0] - color_rgb[1]) > 100):
+            red, green, blue = [_ / BYTE_MAX for _ in color_rgb]
+            if (abs(red - green) > 100):
                 self.send_command("red")
             else:
                 self.send_command("yellow")

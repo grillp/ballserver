@@ -110,7 +110,12 @@ class LedBallLight(Light):
         self.send_command("on")
 
         if ATTR_BRIGHTNESS in kwargs:
+            color_rgb = kwargs[ATTR_BRIGHTNESS]
             _LOGGER.debug("turn_on %s : brightness=%s", self._name, kwargs[ATTR_BRIGHTNESS])
+            if abs(color[0] - color[1]) > 100):
+                self.send_command("red")
+            else:
+                self.send_command("yellow")
 
         if ATTR_RGB_COLOR in kwargs:
             _LOGGER.debug("turn_on %s : color=%s", self._name, kwargs[ATTR_RGB_COLOR])

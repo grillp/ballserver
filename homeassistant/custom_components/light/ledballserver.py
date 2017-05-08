@@ -114,10 +114,10 @@ def send_command(command):
             color_rgb=kwargs[ATTR_RGB_COLOR]
             _LOGGER.debug("turn_on %s : color=%s", self._name, color_rgb)
             red, green, blue = [_ / BYTE_MAX for _ in color_rgb]
-            if (abs(red - green) > 100):
-                self.send_command("red")
-            else:
-                self.send_command("yellow")
+            # if (abs(red - green) > 100):
+            #     self.send_command("red")
+            # else:
+            #     self.send_command("yellow")
 
     def turn_off(self, **kwargs):
         """Instruct the light to turn off."""

@@ -24,6 +24,7 @@ logger.addHandler(handler)
 class LEDBall():
     def __init__(self):
         self._on = False
+        self._brightness = 0
         self.powerOff()
 
     def send_ir_command(self, command):
@@ -36,11 +37,14 @@ class LEDBall():
 
     def powerOn(self):
         self.send_ir_command("KEY_POWER")
+        self._brightness = 3 if not self._on
+        self._brightness = ((self._brightness) % 3 + 1) if self._on
         self._on = True
 
     def powerOff(self):
         self.send_ir_command("KEY_OFF")
         self._on = False
+        self._brightness = 0
 
     def red(self):
         self.powerOnPlusCommand("KEY_RED")
@@ -56,6 +60,9 @@ class LEDBall():
 
     def isOn(self):
         return self._on
+
+    def getBrightness(self):
+        return 1;
 
 def response(message=""):
   if message != "":

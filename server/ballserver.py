@@ -42,16 +42,16 @@ class LEDBall():
         self._on = False
 
     def red(self):
-        self.("KEY_RED")
+        self.powerOnPlusCommand("KEY_RED")
 
     def yellow(self):
-        self.("KEY_YELLOW")
+        self.powerOnPlusCommand("KEY_YELLOW")
 
     def brightness(self):
-        self.("KEY_BRIGHTNESS_CYCLE")
+        self.powerOnPlusCommand("KEY_BRIGHTNESS_CYCLE")
 
     def cycle(self):
-        self.("KEY_CYCLEWINDOWS")
+        self.powerOnPlusCommand("KEY_CYCLEWINDOWS")
 
     def isOn(self):
         return self._on

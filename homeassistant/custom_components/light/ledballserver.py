@@ -18,6 +18,7 @@ PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend({
 })
 
 SUPPORT_LEDBALL = (SUPPORT_BRIGHTNESS | SUPPORT_RGB_COLOR )
+BYTE_MAX = 255
 
 def setup_platform(hass, config, add_devices, discovery_info=None):
     """Setup the LED Ball Server platform."""

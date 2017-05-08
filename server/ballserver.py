@@ -37,9 +37,7 @@ class LEDBall():
 
     def powerOn(self):
         self.send_ir_command("KEY_POWER")
-        if self._on:
-            self._brightness = ((self._brightness) % 3 + 1)
-        else:
+        if not self._on:
             self._brightness = 3
         self._on = True
 
@@ -55,6 +53,7 @@ class LEDBall():
         self.powerOnPlusCommand("KEY_YELLOW")
 
     def brightness(self):
+        self._brightness = ((self._brightness) % 3 + 1)
         self.powerOnPlusCommand("KEY_BRIGHTNESS_CYCLE")
 
     def cycle(self):
@@ -64,7 +63,7 @@ class LEDBall():
         return self._on
 
     def getBrightness(self):
-        return 1;
+        return self._brightness;
 
 def response(message=""):
   if message != "":

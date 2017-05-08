@@ -107,7 +107,7 @@ class BallOn(Resource):
     isLeaf = True
     def __init__(self, ledball):
         self._ledball = ledball
-    def render_GET(self, Request):
+    def render_GET(self, request):
         self._ledball.powerOn()
     	return rendersStateResponse(request, self._ledball)
 
@@ -115,7 +115,7 @@ class BallOff(Resource):
     isLeaf = True
     def __init__(self, ledball):
         self._ledball = ledball
-    def render_GET(self, Request):
+    def render_GET(self, request):
         self._ledball.powerOff()
         return rendersStateResponse(request, self._ledball)
 
@@ -123,7 +123,7 @@ class BallRed(Resource):
     isLeaf = True
     def __init__(self, ledball):
         self._ledball = ledball
-    def render_GET(self, Request):
+    def render_GET(self, request):
         self._ledball.red()
         return rendersStateResponse(request, self._ledball)
 
@@ -131,14 +131,14 @@ class BallYellow(Resource):
     isLeaf = True
     def __init__(self, ledball):
         self._ledball = ledball
-    def render_GET(self, Request):
+    def render_GET(self, request):
         self._ledball.yellow()
         return rendersStateResponse(request, self._ledball)
 
 class BallBrightness(Resource):
     def __init__(self, ledball):
         self._ledball = ledball
-    def render_GET(self, Request):
+    def render_GET(self, request):
         self._ledball.brightness()
         return rendersStateResponse(request, self._ledball)
 
@@ -146,7 +146,7 @@ class BallColourCycle(Resource):
     isLeaf = True
     def __init__(self, ledball):
         self._ledball = ledball
-    def render_GET(self, Request):
+    def render_GET(self, request):
         self._ledball.cycle()
         return rendersStateResponse(request, self._ledball)
 

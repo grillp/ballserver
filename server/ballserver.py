@@ -146,6 +146,7 @@ class BallStateJson(Resource):
         request.setHeader('Content-Type', 'application/json')
         request.write(data)
         request.finish()
+        return server.NOT_DONE_YET
 
 logger.info("Setting up Web Server..")
 

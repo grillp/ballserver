@@ -4,9 +4,9 @@ import voluptuous as vol
 import http.client
 
 # Import the device class from the component that you want to support
-from homeassistant.components.light import ATTR_BRIGHTNESS, ATTR_RGB_COLOR,
-                                           SUPPORT_BRIGHTNESS, SUPPORT_RGB_COLOR, 
-                                           Light, PLATFORM_SCHEMA
+from homeassistant.components.light import (ATTR_BRIGHTNESS, ATTR_RGB_COLOR,
+                                            SUPPORT_BRIGHTNESS, SUPPORT_RGB_COLOR,
+                                            Light, PLATFORM_SCHEMA)
 from homeassistant.const import CONF_HOSTS
 import homeassistant.helpers.config_validation as cv
 

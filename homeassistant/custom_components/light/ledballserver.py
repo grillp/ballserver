@@ -15,6 +15,7 @@ PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend({
     vol.Optional(CONF_HOSTS): vol.All(cv.ensure_list, [cv.string]),
 })
 
+SUPPORT_LEDBALL = (SUPPORT_BRIGHTNESS | SUPPORT_RGB_COLOR )
 
 def setup_platform(hass, config, add_devices, discovery_info=None):
     """Setup the LED Ball Server platform."""
@@ -49,6 +50,15 @@ class LedBallLight(Light):
         self._name = "LED Ball Light " + str(id)
         self._state = False
         self._brightness = None
+        red = int(1 * BYTE_MAX)
+        green = 0
+        blue = 0
+        self._rgb = [red, green, blue]
+
+    @property
+    def supported_features(self):
+        """Flag supported features."""
+        return SUPPORT_LEDBALL
 
     @property
     def name(self):
@@ -59,6 +69,11 @@ class LedBallLight(Light):
     def brightness(self):
         """Return the Brightness of the Bulb"""
         return self._brightness
+
+    @property
+    def rgb_color(self):
+        return self._rgb
+
 
     @property
     def is_on(self):

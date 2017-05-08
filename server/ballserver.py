@@ -37,10 +37,10 @@ class LEDBall():
 
     def powerOn(self):
         self.send_ir_command("KEY_POWER")
-        if self._on
+        if self._on:
             self._brightness = ((self._brightness) % 3 + 1)
-        else
-            self._brightness = 3 
+        else:
+            self._brightness = 3
         self._on = True
 
     def powerOff(self):

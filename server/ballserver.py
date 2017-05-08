@@ -8,7 +8,7 @@ import logging
 import logging.handlers
 from time import sleep
 
-COMMAND_DELAY=0.4
+MULTI_COMMAND_DELAY=0.4
 
 
 LOG_FILENAME = "/tmp/myservice.log"
@@ -28,36 +28,33 @@ class LEDBall():
     def send_ir_command(self, command):
         call(["/usr/bin/irsend", "SEND_ONCE", "ledball", command]);
 
+    def powerOnPlusCommand(self, cpmmand):
+        self.powerOn()
+        sleep(MULTI_COMMAND_DELAY)
+        self.send_ir_command(command);
+
     def powerOn(self):
-        self.send_ir_command("KEY_POWER");
+        self.send_ir_command("KEY_POWER")
         self._on = True
 
     def powerOff(self):
-        self.send_ir_command("KEY_OFF");
+        self.send_ir_command("KEY_OFF")
         self._on = False
+
+    def red(self):
+        self.("KEY_RED")
+
+    def yellow(self):
+        self.("KEY_YELLOW")
+
+    def brightness(self):
+        self.("KEY_BRIGHTNESS_CYCLE")
+
+    def cycle(self):
+        self.("KEY_CYCLEWINDOWS")
 
     def isOn(self):
         return self._on
-
-    def red(self):
-        self.powerOn()
-        sleep(COMMAND_DELAY)
-        self.send_ir_command("KEY_RED");
-
-    def yellow(self):
-        self.powerOn()
-        sleep(COMMAND_DELAY)
-        self.send_ir_command("KEY_YELLOW");
-
-    def brightness(self):
-        self.powerOn()
-        sleep(COMMAND_DELAY)
-        self.send_ir_command("KEY_BRIGHTNESS_CYCLE");
-
-    def cycle(self):
-        self.powerOn()
-        sleep(COMMAND_DELAY)
-        self.send_ir_command("KEY_CYCLEWINDOWS");
 
 def response(message=""):
   if message != "":

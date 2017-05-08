@@ -149,7 +149,7 @@ web_root.putChild("yellow", BallYellow(ledball))
 web_root.putChild("brightness", BallBrightness(ledball))
 web_root.putChild("colours", BallColourCycle(ledball))
 web_root.putChild("state", BallState(ledball))
-web_root.putChild("state.json", BallState(ledball))
+web_root.putChild("state.json", BallStateJson(ledball))
 
 logger.info("Setting up Site")
 site = server.Site(web_root)

@@ -36,10 +36,10 @@ class LEDBall():
 
     def send_ir_command(self, command):
         call(["/usr/bin/irsend", "SEND_ONCE", "ledball", command]);
+        sleep(MULTI_COMMAND_DELAY)
 
     def powerOnPlusCommand(self, command):
         self.powerOn()
-        sleep(MULTI_COMMAND_DELAY)
         self.send_ir_command(command);
 
     def powerOn(self):

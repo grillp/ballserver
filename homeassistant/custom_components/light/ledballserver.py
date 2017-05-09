@@ -91,6 +91,11 @@ class LedBallLight(Light):
         conn.close()
         return data.decode('utf-8')
 
+    def send_color_command(self, color):
+        r,g,b = [_ for _ in color]
+        command = "color?c=("+str(r)+","+str(g)+","+str(b)+")"
+        return self.send_command(command)
+
 # import http.client
 # def send_command(command):
 #     conn = http.client.HTTPConnection("rasp-3:8080")
@@ -113,13 +118,7 @@ class LedBallLight(Light):
         if ATTR_RGB_COLOR in kwargs:
             color_rgb=kwargs[ATTR_RGB_COLOR]
             _LOGGER.debug("turn_on %s : color=%s", self._name, color_rgb)
-            red, green, blue = [_ for _ in color_rgb]
-            if (abs(red - green) > 100):
-                _LOGGER.debug("turn_on %s : setting colo to RED", self._name)
-                self.send_command("red")
-            else:
-                _LOGGER.debug("turn_on %s : setting colo to YELLOW", self._name)
-                self.send_command("yellow")
+            self.send_color_command(color_rgb);
 
     def turn_off(self, **kwargs):
         """Instruct the light to turn off."""

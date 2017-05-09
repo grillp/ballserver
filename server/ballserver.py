@@ -8,6 +8,7 @@ import logging
 import logging.handlers
 import json
 from time import sleep
+from ast import literal_eval
 
 MULTI_COMMAND_DELAY=0.4
 
@@ -123,10 +124,9 @@ class LEDBall():
 def response(message=""):
     if message != "":
         message = message + "</br>"
-    return "<html>" + message + "<a href='/on'>ON</a><br/><a href='/off'>OFF</a><br/><a href='/red'>RED</a><br/><a href='/yellow'>YELLOW</a><br/><a href='/brightness'>BRIGHTNESS</a><br/><a href='/colors'>COLOURS</a></html>"
-
-def rendersStateResponse(request, ledball):
+    return "<html>" + message + "<a href='/on'>ON</a><br/><a href='/off'>OFF</a><br/><a href='/red'>RED</a><br/><a href='/yellow'>YELLOW</a><br/><a href='/brightness'>BRIGHTNESS</a><br/><a href='/colors'>COLOURS</a></htcycledef rendersStateResponse(request, ledball):
     state = "ON" if ledball.isOn() else "OFF"
+    if message != "":
     brightness = str(ledball.getBrightness())
     color = colors_rgb_lookup[ledball.getColor()]
     data = json.dumps({'state': state, 'brightness': brightness, 'color': color})
@@ -171,6 +171,15 @@ class BallColor(Resource):
         self._ledball.color(self._color)
         return rendersStateResponse(request, self._ledball)
 
+class BallColorSet(Resource):
+    isLeaf = True
+    def __init__(self, ledball):
+        self._ledball = ledball
+    def render_GET(self, request):
+        color = literal_eval(request.args['c'])
+        self._ledball.color(closestColorInRGB(color))
+        return rendersStateResponse(request, self._ledball)
+
 class BallBrightness(Resource):
     def __init__(self, ledball):
         self._ledball = ledball
@@ -178,8 +187,9 @@ class BallBrightness(Resource):
         self._ledball.brightness()
         return rendersStateResponse(request, self._ledball)
 
-class BallColorCycle(Resource):
+class BallColorCycle(Recycle):
     isLeaf = True
+        return rendersStateResponse(request, self._ledball)
     def __init__(self, ledball):
         self._ledball = ledball
     def render_GET(self, request):
@@ -207,8 +217,10 @@ web_root.putChild("lightblue", BallColor(ledball, COLOR_LIGHT_BLUE))
 web_root.putChild("green", BallColor(ledball, COLOR_GREEN))
 web_root.putChild("purple", BallColor(ledball, COLOR_PURPLE))
 web_root.putChild("brightness", BallBrightness(ledball))
-web_root.putChild("colors", BallColorCycle(ledball))
+web_root.putChild("cycle", BallColorCycle(ledball))
 web_root.putChild("state", BallState(ledball))
+web_root.putChild("purple", BallColor(ledball, COLOR_PURPLE))
+web_root.putChild("color", BallColorSet(ledball))
 
 logger.info("Setting up Site")
 site = server.Site(web_root)

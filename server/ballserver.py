@@ -82,31 +82,31 @@ class LEDBall():
         self._brightness = 0
 
     def red(self):
-        self._color = 'red'
+        self._color = COLOR_RED
         self.powerOnPlusCommand(CMD_RED)
 
     def yellow(self):
-        self._color = 'yellow'
+        self._color = COLOR_AMBER
         self.powerOnPlusCommand(CMD_AMBER)
 
     def blue(self):
-        self._color = 'blue'
+        self._color = COLOR_DARK_BLUE
         self.powerOnPlusCommand(CMD_DARK_BLUE)
 
     def light_blue(self):
-        self._color = 'light_blue'
+        self._color = COLOR_LIGHT_BLUE
         self.powerOnPlusCommand(CMD_LIGHT_BLUE)
 
     def green(self):
-        self._color = 'green'
+        self._color = COLOR_GREEN
         self.powerOnPlusCommand(CMD_GREEN)
 
     def white(self):
-        self._color = 'white'
+        self._color = COLOR_WHITE
         self.powerOnPlusCommand(CMD_WHITE)
 
     def purple(self):
-        self._color = 'purple'
+        self._color = COLOR_GREEN
         self.powerOnPlusCommand(CMD_GREEN)
 
     def brightness(self):

@@ -131,7 +131,7 @@ class LedBallLight(Light):
         This is the only method that should fetch new data for Home Assistant.
         """
         _LOGGER.debug("update %s", self._name)
-        state = json.loads(self.send_command("state.json"))
+        state = json.loads(self.send_command("state"))
         self._state = (state["state"] == "ON")
         self._rgb = state["color"]
         self._brightness = ((int(state["brightness"])-1) * 83) + 41

@@ -82,22 +82,23 @@ class LEDBall():
         self.color(COLOR_AMBER)
         self.powerOff()
 
-    def send_ir_command(self, command):
+
+    def sendIRCcommand(self, command):
         call(["/usr/bin/irsend", "SEND_ONCE", "ledball", command]);
         sleep(MULTI_COMMAND_DELAY)
 
     def powerOnPlusCommand(self, command):
         self.powerOn()
-        self.send_ir_command(command);
+        self.sendIRCcommand(command);
 
     def powerOn(self):
-        self.send_ir_command(CMD_ON)
+        self.sendIRCcommand(CMD_ON)
         if not self._on:
             self._brightness = 3
         self._on = True
 
     def powerOff(self):
-        self.send_ir_command(CMD_OFF)
+        self.sendIRCcommand(CMD_OFF)
         self._on = False
         self._brightness = 0
 
@@ -171,8 +172,9 @@ class BallColorSet(Resource):
     def __init__(self, ledball):
         self._ledball = ledball
     def render_GET(self, request):
-        color = literal_eval(request.args['c'][0])
-        self._ledball.color(closestColorInRGB(color))
+        if 'c' in request.args:
+            color = literal_eval(request.args['c'][0])
+            self._ledball.color(closestColorInRGB(color))
         return rendersStateResponse(request, self._ledball)
 
 class BallBrightness(Resource):
@@ -180,7 +182,13 @@ class BallBrightness(Resource):
     def __init__(self, ledball):
         self._ledball = ledball
     def render_GET(self, request):
-        self._ledball.brightness()
+        count = 1
+        if 'l' in request.args:
+            requested_level = literal_eval(request.args['l'][0])
+            current_level = self._ledball.getBrightness()
+            count = ((((requested_level-1) - (current_level-1)) + 3) % 3)
+        for _ in range(count):
+            self._ledball.brightness()
         return rendersStateResponse(request, self._ledball)
 
 class BallColorCycle(Resource):

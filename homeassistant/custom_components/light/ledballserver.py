@@ -113,7 +113,7 @@ class LedBallLight(Light):
         if ATTR_RGB_COLOR in kwargs:
             color_rgb=kwargs[ATTR_RGB_COLOR]
             _LOGGER.debug("turn_on %s : color=%s", self._name, color_rgb)
-            red, green, blue = [_ for _ n color_rgb]
+            red, green, blue = [_ for _ in color_rgb]
             if (abs(red - green) > 100):
                 _LOGGER.debug("turn_on %s : setting colo to RED", self._name)
                 self.send_command("red")

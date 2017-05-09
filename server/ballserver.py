@@ -106,8 +106,8 @@ class LEDBall():
         self.powerOnPlusCommand(CMD_WHITE)
 
     def purple(self):
-        self._color = COLOR_GREEN
-        self.powerOnPlusCommand(CMD_GREEN)
+        self._color = COLOR_PURPLE
+        self.powerOnPlusCommand(CMD_PURPLE)
 
     def brightness(self):
         self._brightness = ((self._brightness) % 3 + 1)

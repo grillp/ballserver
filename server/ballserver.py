@@ -121,12 +121,8 @@ class LEDBall():
     def getColor(self):
         return self._color
 
-def response(message=""):
-    if message != "":
-        message = message + "</br>"
-    return "<html>" + message + "<a href='/on'>ON</a><br/><a href='/off'>OFF</a><br/><a href='/red'>RED</a><br/><a href='/yellow'>YELLOW</a><br/><a href='/brightness'>BRIGHTNESS</a><br/><a href='/colors'>COLOURS</a></htcycledef rendersStateResponse(request, ledball):
+def rendersStateResponse(request, ledball):
     state = "ON" if ledball.isOn() else "OFF"
-    if message != "":
     brightness = str(ledball.getBrightness())
     color = colors_rgb_lookup[ledball.getColor()]
     data = json.dumps({'state': state, 'brightness': brightness, 'color': color})
@@ -219,7 +215,6 @@ web_root.putChild("purple", BallColor(ledball, COLOR_PURPLE))
 web_root.putChild("brightness", BallBrightness(ledball))
 web_root.putChild("cycle", BallColorCycle(ledball))
 web_root.putChild("state", BallState(ledball))
-web_root.putChild("purple", BallColor(ledball, COLOR_PURPLE))
 web_root.putChild("color", BallColorSet(ledball))
 
 logger.info("Setting up Site")

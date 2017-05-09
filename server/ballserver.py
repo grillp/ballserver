@@ -11,7 +11,6 @@ from time import sleep
 
 MULTI_COMMAND_DELAY=0.4
 
-
 LOG_FILENAME = "/tmp/myservice.log"
 LOG_LEVEL = logging.INFO
 logger = logging.getLogger(__name__)
@@ -60,13 +59,14 @@ colors_rgb_lookup = {
 
 def colorDistanceInRGB(color1, color2):
     r1, g1, b1 = [_ for _ in color1]
-    r2, g3, b2 = [_ for _ in color2]
-    return ((r2-r1)*0.30) ** 2 + ((g2-g1)*0.59) ** 2 + ((b2-b1) ** 0.11)^2
+    r2, g2, b2 = [_ for _ in color2]
+    return ((r2-r1)*0.30) ** 2 + ((g2-g1)*0.59) ** 2 + ((b2-b1)*0.11) ** 2
 
+MAX_COLOR_DISTANCE = colorDistanceInRGB((0,0,0),(255,255,255))
 def closestColorInRGB(color):
     match_name = None
-    match_distance = 1000
-    for name, rgb in colors_rgb_lookup.values():
+    match_distance = MAX_COLOR_DISTANCE
+    for name, rgb in colors_rgb_lookup.items():
         distance = colorDistanceInRGB(color, rgb)
         if distance < match_distance:
             match_name = name
@@ -206,7 +206,6 @@ web_root.putChild("blue", BallColor(ledball, COLOR_DARK_BLUE))
 web_root.putChild("lightblue", BallColor(ledball, COLOR_LIGHT_BLUE))
 web_root.putChild("green", BallColor(ledball, COLOR_GREEN))
 web_root.putChild("purple", BallColor(ledball, COLOR_PURPLE))
-
 web_root.putChild("brightness", BallBrightness(ledball))
 web_root.putChild("colours", BallColourCycle(ledball))
 web_root.putChild("state", BallState(ledball))

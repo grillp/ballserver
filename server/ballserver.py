@@ -64,7 +64,7 @@ class LEDBall():
         self._on = False
         self._brightness = 0
         self._color = None
-        self.color(COLOR_AMBER)()
+        self.color(COLOR_AMBER)
         self.powerOff()
 
     def send_ir_command(self, command):

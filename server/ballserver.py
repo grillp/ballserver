@@ -187,7 +187,7 @@ class BallBrightness(Resource):
         self._ledball.brightness()
         return rendersStateResponse(request, self._ledball)
 
-class BallColorCycle(Resourced):
+class BallColorCycle(Resource):
     isLeaf = True
     def __init__(self, ledball):
         self._ledball = ledball

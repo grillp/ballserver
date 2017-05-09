@@ -90,34 +90,6 @@ class LEDBall():
         self._color = color
         self.powerOnPlusCommand(colorToCommand(color))
 
-    # def red(self):
-    #     self._color = COLOR_RED
-    #     self.powerOnPlusCommand(CMD_RED)
-    #
-    # def yellow(self):
-    #     self._color = COLOR_AMBER
-    #     self.powerOnPlusCommand(CMD_AMBER)
-    #
-    # def blue(self):
-    #     self._color = COLOR_DARK_BLUE
-    #     self.powerOnPlusCommand(CMD_DARK_BLUE)
-    #
-    # def light_blue(self):
-    #     self._color = COLOR_LIGHT_BLUE
-    #     self.powerOnPlusCommand(CMD_LIGHT_BLUE)
-    #
-    # def green(self):
-    #     self._color = COLOR_GREEN
-    #     self.powerOnPlusCommand(CMD_GREEN)
-    #
-    # def white(self):
-    #     self._color = COLOR_WHITE
-    #     self.powerOnPlusCommand(CMD_WHITE)
-    #
-    # def purple(self):
-    #     self._color = COLOR_PURPLE
-    #     self.powerOnPlusCommand(CMD_PURPLE)
-
     def brightness(self):
         self._brightness = ((self._brightness) % 3 + 1)
         self.powerOnPlusCommand(CMD_BRIGHT)
@@ -176,62 +148,6 @@ class BallOff(Resource):
         self._ledball.powerOff()
         return rendersStateResponse(request, self._ledball)
 
-# class BallRed(Resource):
-#     isLeaf = True
-#     def __init__(self, ledball):
-#         self._ledball = ledball
-#     def render_GET(self, request):
-#         self._ledball.red()
-#         return rendersStateResponse(request, self._ledball)
-#
-# class BallYellow(Resource):
-#     isLeaf = True
-#     def __init__(self, ledball):
-#         self._ledball = ledball
-#     def render_GET(self, request):
-#         self._ledball.yellow()
-#         return rendersStateResponse(request, self._ledball)
-#
-# class BallWhite(Resource):
-#     isLeaf = True
-#     def __init__(self, ledball):
-#         self._ledball = ledball
-#     def render_GET(self, request):
-#         self._ledball.white()
-#         return rendersStateResponse(request, self._ledball)
-#
-# class BallBlue(Resource):
-#     isLeaf = True
-#     def __init__(self, ledball):
-#         self._ledball = ledball
-#     def render_GET(self, request):
-#         self._ledball.blue()
-#         return rendersStateResponse(request, self._ledball)
-#
-# class BallLightBlue(Resource):
-#     isLeaf = True
-#     def __init__(self, ledball):
-#         self._ledball = ledball
-#     def render_GET(self, request):
-#         self._ledball.light_blue()
-#         return rendersStateResponse(request, self._ledball)
-#
-# class BallGreen(Resource):
-#     isLeaf = True
-#     def __init__(self, ledball):
-#         self._ledball = ledball
-#     def render_GET(self, request):
-#         self._ledball.green()
-#         return rendersStateResponse(request, self._ledball)
-#
-# class BallPurple(Resource):
-#     isLeaf = True
-#     def __init__(self, ledball):
-#         self._ledball = ledball
-#     def render_GET(self, request):
-#         self._ledball.purple()
-#         return rendersStateResponse(request, self._ledball)
-
 class BallColor(Resource):
     isLeaf = True
     def __init__(self, ledball, color):
@@ -269,13 +185,6 @@ ledball = LEDBall()
 web_root = WebRoot()
 web_root.putChild("on", BallOn(ledball))
 web_root.putChild("off", BallOff(ledball))
-# web_root.putChild("red", BallRed(ledball))
-# web_root.putChild("yellow", BallYellow(ledball))
-# web_root.putChild("white", BallWhite(ledball))
-# web_root.putChild("blue", BallBlue(ledball))
-# web_root.putChild("lightblue", BallLightBlue(ledball))
-# web_root.putChild("green", BallGreen(ledball))
-# web_root.putChild("purple", BallPurple(ledball))
 web_root.putChild("red", BallColor(ledball, COLOR_RED))
 web_root.putChild("yellow", BallColor(ledball, COLOR_AMBER))
 web_root.putChild("white", BallColor(ledball, COLOR_WHITE))

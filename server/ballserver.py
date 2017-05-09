@@ -123,7 +123,7 @@ class LEDBall():
 def response(message=""):
     if message != "":
         message = message + "</br>"
-    return "<html>" + message + "<a href='/on'>ON</a><br/><a href='/off'>OFF</a><br/><a href='/red'>RED</a><br/><a href='/yellow'>YELLOW</a><br/><a href='/brightness'>BRIGHTNESS</a><br/><a href='/colours'>COLOURS</a></html>"
+    return "<html>" + message + "<a href='/on'>ON</a><br/><a href='/off'>OFF</a><br/><a href='/red'>RED</a><br/><a href='/yellow'>YELLOW</a><br/><a href='/brightness'>BRIGHTNESS</a><br/><a href='/colors'>COLOURS</a></html>"
 
 def rendersStateResponse(request, ledball):
     state = "ON" if ledball.isOn() else "OFF"
@@ -178,7 +178,7 @@ class BallBrightness(Resource):
         self._ledball.brightness()
         return rendersStateResponse(request, self._ledball)
 
-class BallColourCycle(Resource):
+class BallColorCycle(Resource):
     isLeaf = True
     def __init__(self, ledball):
         self._ledball = ledball
@@ -207,7 +207,7 @@ web_root.putChild("lightblue", BallColor(ledball, COLOR_LIGHT_BLUE))
 web_root.putChild("green", BallColor(ledball, COLOR_GREEN))
 web_root.putChild("purple", BallColor(ledball, COLOR_PURPLE))
 web_root.putChild("brightness", BallBrightness(ledball))
-web_root.putChild("colours", BallColourCycle(ledball))
+web_root.putChild("colors", BallColorCycle(ledball))
 web_root.putChild("state", BallState(ledball))
 
 logger.info("Setting up Site")

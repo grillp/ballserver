@@ -86,7 +86,7 @@ class LEDBall():
         self._on = False
         self._brightness = 0
 
-    def color(self, color)
+    def color(self, color):
         self._color = color
         self.powerOnPlusCommand(colorToCommand(color))
 

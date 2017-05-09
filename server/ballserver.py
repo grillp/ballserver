@@ -171,6 +171,10 @@ class BallColorSet(Resource):
     def __init__(self, ledball):
         self._ledball = ledball
     def render_GET(self, request):
+        print(request.args['c'])
+        print(request.args['c'])
+        print(request.args['c'])
+        print(request.args['c'])
         color = literal_eval(request.args['c'])
         self._ledball.color(closestColorInRGB(color))
         return rendersStateResponse(request, self._ledball)
@@ -183,7 +187,7 @@ class BallBrightness(Resource):
         self._ledball.brightness()
         return rendersStateResponse(request, self._ledball)
 
-class BallColorCycle(Resource):
+class BallColorCycle(Resourced):
     isLeaf = True
     def __init__(self, ledball):
         self._ledball = ledball

@@ -95,7 +95,7 @@ class LedBallLight(Light):
         # 3 Bightness Levels. 1-3
         # divided in 3 ranges
         l = (brightness / (256 / 3)) + 1
-        command = "brightness?l="+str(l)
+        command = "brightness?l="+str(int(l))
         return self.send_command(command)
 
 

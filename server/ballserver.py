@@ -21,9 +21,37 @@ formatter = logging.Formatter('%(asctime)s %(levelname)-8s %(message)s')
 handler.setFormatter(formatter)
 logger.addHandler(handler)
 
-colors = {
-    'yellow': (255, 165, 0),
-    'red': (139, 0, 0),
+CMD_ON = KEY_F1
+CMD_OFF = KEY_F2
+CMD_AUTO = KEY_F3
+CMD_PAUSE = KEY_F4
+CMD_FLASH = KEY_F5
+CMD_BRIGHT = KEY_F6
+CMD_TIMER_3H = KEY_F7
+CMD_WHITE = KEY_F8
+CMD_RED = KEY_F9
+CMD_GREEN = KEY_F10
+CMD_DARK_BLUE = KEY_F11
+CMD_AMBER = KEY_F12
+CMD_PURPLE = KEY_F13
+CMD_LIGHT_BLUE = KEY_F14
+
+COLOR_WHITE = CMD_WHITE
+COLOR_RED = CMD_RED
+COLOR_GREEN = CMD_GREEN
+COLOR_DARK_BLUE = CMD_DARK_BLUE
+COLOR_AMBER = CMD_AMBER
+COLOR_PURPLE = CMD_PURPLE
+COLOR_LIGHT_BLUE = CMD_LIGHT_BLUE
+
+colors_rgb_lookup = {
+    COLOR_WHITE: (245, 245, 245),
+    COLOR_RED: (139, 0, 0),
+    COLOR_GREEN: (0, 100, 0),
+    COLOR_DARK_BLUE: (0, 0, 139),
+    COLOR_AMBER:  (255, 165, 0),
+    COLOR_PURPLE: (128, 0, 128),
+    COLOR_LIGHT_BLUE: (173, 216, 230),
 }
 
 class LEDBall():
@@ -43,30 +71,50 @@ class LEDBall():
         self.send_ir_command(command);
 
     def powerOn(self):
-        self.send_ir_command("KEY_POWER")
+        self.send_ir_command(CMD_ON)
         if not self._on:
             self._brightness = 3
         self._on = True
 
     def powerOff(self):
-        self.send_ir_command("KEY_OFF")
+        self.send_ir_command(CMD_OFF)
         self._on = False
         self._brightness = 0
 
     def red(self):
         self._color = 'red'
-        self.powerOnPlusCommand("KEY_RED")
+        self.powerOnPlusCommand(CMD_RED)
 
     def yellow(self):
         self._color = 'yellow'
-        self.powerOnPlusCommand("KEY_YELLOW")
+        self.powerOnPlusCommand(CMD_AMBER)
+
+    def blue(self):
+        self._color = 'blue'
+        self.powerOnPlusCommand(CMD_DARK_BLUE)
+
+    def light_blue(self):
+        self._color = 'light_blue'
+        self.powerOnPlusCommand(CMD_LIGHT_BLUE)
+
+    def green(self):
+        self._color = 'green'
+        self.powerOnPlusCommand(CMD_GREEN)
+
+    def white(self):
+        self._color = 'white'
+        self.powerOnPlusCommand(CMD_WHITE)
+
+    def purple(self):
+        self._color = 'purple'
+        self.powerOnPlusCommand(CMD_GREEN)
 
     def brightness(self):
         self._brightness = ((self._brightness) % 3 + 1)
-        self.powerOnPlusCommand("KEY_BRIGHTNESS_CYCLE")
+        self.powerOnPlusCommand(CMD_BRIGHT)
 
     def cycle(self):
-        self.powerOnPlusCommand("KEY_CYCLEWINDOWS")
+        self.powerOnPlusCommand(CMD_AUTO)
 
     def isOn(self):
         return self._on
@@ -85,7 +133,7 @@ def response(message=""):
 def rendersStateResponse(request, ledball):
     state = "ON" if ledball.isOn() else "OFF"
     brightness = str(ledball.getBrightness())
-    color = colors[ledball.getColor()]
+    color = colors_rgb_lookup[ledball.getColor()]
     data = json.dumps({'state': state, 'brightness': brightness, 'color': color})
     request.setHeader('Content-Type', 'application/json')
     request.write(data)
@@ -135,6 +183,46 @@ class BallYellow(Resource):
         self._ledball.yellow()
         return rendersStateResponse(request, self._ledball)
 
+class BallWhite(Resource):
+    isLeaf = True
+    def __init__(self, ledball):
+        self._ledball = ledball
+    def render_GET(self, request):
+        self._ledball.white()
+        return rendersStateResponse(request, self._ledball)
+
+class BallBlue(Resource):
+    isLeaf = True
+    def __init__(self, ledball):
+        self._ledball = ledball
+    def render_GET(self, request):
+        self._ledball.blue()
+        return rendersStateResponse(request, self._ledball)
+
+class BallLightBlue(Resource):
+    isLeaf = True
+    def __init__(self, ledball):
+        self._ledball = ledball
+    def render_GET(self, request):
+        self._ledball.light_blue()
+        return rendersStateResponse(request, self._ledball)
+
+class BallGreen(Resource):
+    isLeaf = True
+    def __init__(self, ledball):
+        self._ledball = ledball
+    def render_GET(self, request):
+        self._ledball.green()
+        return rendersStateResponse(request, self._ledball)
+
+class BallPurple(Resource):
+    isLeaf = True
+    def __init__(self, ledball):
+        self._ledball = ledball
+    def render_GET(self, request):
+        self._ledball.purple()
+        return rendersStateResponse(request, self._ledball)
+
 class BallBrightness(Resource):
     def __init__(self, ledball):
         self._ledball = ledball
@@ -155,13 +243,6 @@ class BallState(Resource):
     def __init__(self, ledball):
         self._ledball = ledball
     def render_GET(self, request):
-        return "ON" if self._ledball.isOn() else "OFF"
-
-class BallStateJson(Resource):
-    isLeaf = True
-    def __init__(self, ledball):
-        self._ledball = ledball
-    def render_GET(self, request):
         return rendersStateResponse(request, self._ledball)
 
 logger.info("Setting up Web Server..")
@@ -172,10 +253,14 @@ web_root.putChild("on", BallOn(ledball))
 web_root.putChild("off", BallOff(ledball))
 web_root.putChild("red", BallRed(ledball))
 web_root.putChild("yellow", BallYellow(ledball))
+web_root.putChild("white", BallWhite(ledball))
+web_root.putChild("blue", BallBlue(ledball))
+web_root.putChild("lightblue", BallLightBlue(ledball))
+web_root.putChild("green", BallGreen(ledball))
+web_root.putChild("purple", BallPurple(ledball))
 web_root.putChild("brightness", BallBrightness(ledball))
 web_root.putChild("colours", BallColourCycle(ledball))
 web_root.putChild("state", BallState(ledball))
-web_root.putChild("state.json", BallStateJson(ledball))
 
 logger.info("Setting up Site")
 site = server.Site(web_root)

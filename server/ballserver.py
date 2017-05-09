@@ -131,7 +131,6 @@ def rendersStateResponse(request, ledball):
     request.finish()
     return server.NOT_DONE_YET
 
-
 class WebRoot(Resource):
     # isLeaf = True
     def getChild(self, name, request):
@@ -177,6 +176,7 @@ class BallColorSet(Resource):
         return rendersStateResponse(request, self._ledball)
 
 class BallBrightness(Resource):
+    isLeaf = True
     def __init__(self, ledball):
         self._ledball = ledball
     def render_GET(self, request):
@@ -185,7 +185,6 @@ class BallBrightness(Resource):
 
 class BallColorCycle(Recycle):
     isLeaf = True
-        return rendersStateResponse(request, self._ledball)
     def __init__(self, ledball):
         self._ledball = ledball
     def render_GET(self, request):

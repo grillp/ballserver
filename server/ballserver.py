@@ -58,6 +58,20 @@ colors_rgb_lookup = {
     COLOR_LIGHT_BLUE: (173, 216, 230),
 }
 
+def colorDistanceInRGB(color1, color2):
+    r1, g1, b1 = [_ for _ in color1]
+    r2, g3, b2 = [_ for _ in color2]
+    return ((r2-r1)*0.30) ** 2 + ((g2-g1)*0.59) ** 2 + ((b2-b1) ** 0.11)^2
+
+def closestColorInRGB(color):
+    match_name = None
+    match_distance = 1000
+    for name, rgb in colors_rgb_lookup.values():
+        distance = colorDistanceInRGB(color, rgb)
+        if distance < match_distance:
+            match_name = name
+            match_distance = distance
+    return match_name
 
 class LEDBall():
     def __init__(self):

@@ -146,7 +146,7 @@ class LedBallLight(Light):
             self._effect = effect
             _LOGGER.debug("turn_on %s : effect=%s", self._name, effect)
             if effect == SERVICE_EFFECT_COLORLOOP:
-                send_cycle_command()
+                self.send_cycle_command()
             else:
                 _LOGGER.debug("turn_on %s : resetting color=%s", self._name,self._rgb)
                 self._effect = None

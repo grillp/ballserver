@@ -63,10 +63,10 @@ class LedBallLight(Light):
     def effect_list(self):
         """Return the list of supported effects for this light."""
         return [
-            SERVICE_EFFECT_PULSE,
+            SERVICE_EFFECT_COLORLOOP,
             SERVICE_EFFECT_STOP,
         ]
-        
+
     @property
     def supported_features(self):
         """Flag supported features."""

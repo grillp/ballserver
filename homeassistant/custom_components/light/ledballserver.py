@@ -18,6 +18,9 @@ PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend({
     vol.Optional(CONF_HOSTS): vol.All(cv.ensure_list, [cv.string]),
 })
 
+SERVICE_EFFECT_COLORLOOP = 'balllight_effect_colorloop'
+SERVICE_EFFECT_STOP = 'balllight_effect_stop'
+
 SUPPORT_LEDBALL = (SUPPORT_BRIGHTNESS | SUPPORT_RGB_COLOR )
 BYTE_MAX = 255
 
@@ -56,6 +59,14 @@ class LedBallLight(Light):
         self._brightness = None
         self._rgb = [0,0,0]
 
+    @property
+    def effect_list(self):
+        """Return the list of supported effects for this light."""
+        return [
+            SERVICE_EFFECT_PULSE,
+            SERVICE_EFFECT_STOP,
+        ]
+        
     @property
     def supported_features(self):
         """Flag supported features."""

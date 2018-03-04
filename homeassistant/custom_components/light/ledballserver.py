@@ -139,6 +139,7 @@ class LedBallLight(Light):
         if ATTR_RGB_COLOR in kwargs:
             color_rgb=kwargs[ATTR_RGB_COLOR]
             _LOGGER.debug("turn_on %s : color=%s", self._name, color_rgb)
+            self._effect = None
             self.send_color_command(color_rgb);
 
         if ATTR_EFFECT in kwargs:
@@ -146,7 +147,7 @@ class LedBallLight(Light):
             self._effect = effect
             _LOGGER.debug("turn_on %s : effect=%s", self._name, effect)
             if effect == SERVICE_EFFECT_COLORLOOP:
-                self.send_cycle_command()
+                self.send_cycle_command();
             else:
                 _LOGGER.debug("turn_on %s : resetting color=%s", self._name,self._rgb)
                 self._effect = None

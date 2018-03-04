@@ -5,7 +5,7 @@ import http.client
 import json
 
 # Import the device class from the component that you want to support
-from homeassistant.components.light import (ATTR_BRIGHTNESS, ATTR_RGB_COLOR,
+from homeassistant.components.light import (ATTR_BRIGHTNESS, ATTR_RGB_COLOR, ATTR_EFFECT
                                             SUPPORT_BRIGHTNESS, SUPPORT_EFFECT, SUPPORT_RGB_COLOR,
                                             Light, PLATFORM_SCHEMA)
 from homeassistant.const import CONF_HOSTS
@@ -58,6 +58,7 @@ class LedBallLight(Light):
         self._state = False
         self._brightness = None
         self._rgb = [0,0,0]
+        self._effect = None
 
     @property
     def effect_list(self):
@@ -81,6 +82,11 @@ class LedBallLight(Light):
     def brightness(self):
         """Return the Brightness of the Bulb"""
         return self._brightness
+
+    @property
+    def effect(self):
+        """Return the Brightness of the Bulb"""
+        return self._effect
 
     @property
     def rgb_color(self):
@@ -133,6 +139,7 @@ class LedBallLight(Light):
 
         if ATTR_EFFECT in kwargs:
             effect = kwargs.get(ATTR_EFFECT)
+            self._effect = effect
             _LOGGER.debug("turn_on %s : effect=%s", self._name, effect)
 
     def turn_off(self, **kwargs):

@@ -121,6 +121,10 @@ class LedBallLight(Light):
         command = "color?c=("+str(r)+","+str(g)+","+str(b)+")"
         return self.send_command(command)
 
+    def send_cycle_command(self):
+        command = "cycle"
+        return self.send_command(command)
+
     def turn_on(self, **kwargs):
         """Instruct the light to turn on."""
         _LOGGER.debug("turn_on %s", self._name)
@@ -141,6 +145,12 @@ class LedBallLight(Light):
             effect = kwargs.get(ATTR_EFFECT)
             self._effect = effect
             _LOGGER.debug("turn_on %s : effect=%s", self._name, effect)
+            if effect == SERVICE_EFFECT_COLORLOOP:
+                send_cycle_command()
+            else:
+                _LOGGER.debug("turn_on %s : resetting color=%s", self._name,self._rgb)
+                self._effect = None
+                self.send_color_command(self._rgb)
 
     def turn_off(self, **kwargs):
         """Instruct the light to turn off."""

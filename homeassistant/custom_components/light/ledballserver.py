@@ -131,6 +131,10 @@ class LedBallLight(Light):
             _LOGGER.debug("turn_on %s : color=%s", self._name, color_rgb)
             self.send_color_command(color_rgb);
 
+        if ATTR_EFFECT in kwargs:
+            effect = kwargs.get(ATTR_EFFECT)
+            _LOGGER.debug("turn_on %s : effect=%s", self._name, effect)
+
     def turn_off(self, **kwargs):
         """Instruct the light to turn off."""
         _LOGGER.debug("turn_off %s", self._name)

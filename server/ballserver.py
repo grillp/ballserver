@@ -51,7 +51,7 @@ def colorToCommand(color):
 colors_rgb_lookup = {
     COLOR_WHITE: (245, 245, 245),
     COLOR_RED: (139, 0, 0),
-    COLOR_GREEN: (0, 100, 0),
+    COLOR_GREEN: (0, 200, 0),
     COLOR_DARK_BLUE: (0, 0, 139),
     COLOR_AMBER:  (255, 165, 0),
     COLOR_PURPLE: (128, 0, 128),

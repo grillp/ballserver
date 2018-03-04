@@ -6,7 +6,7 @@ import json
 
 # Import the device class from the component that you want to support
 from homeassistant.components.light import (ATTR_BRIGHTNESS, ATTR_RGB_COLOR,
-                                            SUPPORT_BRIGHTNESS, SUPPORT_RGB_COLOR,
+                                            SUPPORT_BRIGHTNESS, SUPPORT_EFFECT, SUPPORT_RGB_COLOR,
                                             Light, PLATFORM_SCHEMA)
 from homeassistant.const import CONF_HOSTS
 import homeassistant.helpers.config_validation as cv
@@ -21,7 +21,7 @@ PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend({
 SERVICE_EFFECT_COLORLOOP = 'balllight_effect_colorloop'
 SERVICE_EFFECT_STOP = 'balllight_effect_stop'
 
-SUPPORT_LEDBALL = (SUPPORT_BRIGHTNESS | SUPPORT_RGB_COLOR )
+SUPPORT_LEDBALL = (SUPPORT_BRIGHTNESS | SUPPORT_RGB_COLOR | SUPPORT_EFFECT)
 BYTE_MAX = 255
 
 def setup_platform(hass, config, add_devices, discovery_info=None):

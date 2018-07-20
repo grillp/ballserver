@@ -139,7 +139,7 @@ class LedBallLight2(Light):
 
 
     def send_color_command(self):
-        r,g,b = [_ for _ in color_util.color_hs_to_RGB(self._hs_color)]
+        r,g,b = [_ for _ in color_util.color_hs_to_RGB(*self._hs_color)]
         command = "color?c=("+str(r)+","+str(g)+","+str(b)+")"
         return self.send_command(command)
 

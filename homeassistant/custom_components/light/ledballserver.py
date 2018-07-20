@@ -6,7 +6,7 @@ import json
 
 # Import the device class from the component that you want to support
 from homeassistant.components.light import (ATTR_BRIGHTNESS, ATTR_RGB_COLOR, ATTR_EFFECT,
-                                            SUPPORT_BRIGHTNESS, SUPPORT_EFFECT, SUPPORT_RGB_COLOR,
+                                            SUPPORT_BRIGHTNESS, SUPPORT_EFFECT, SUPPORT_COLOR,
                                             Light, PLATFORM_SCHEMA)
 from homeassistant.const import CONF_HOSTS
 import homeassistant.helpers.config_validation as cv

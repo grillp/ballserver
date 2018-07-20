@@ -186,3 +186,14 @@ class LedBallLight2(Light):
         # As we have disabled polling, we need to inform
         # Home Assistant about updates in our state ourselves.
         self.schedule_update_ha_state()
+
+
+    def update(self):
+        """Fetch new state data for this light.
+        This is the only method that should fetch new data for Home Assistant.
+        """
+        _LOGGER.debug("update %s", self._name)
+        state = json.loads(self.send_command("state"))
+        self._state = (state["state"] == "ON")
+        self.self._hs_color = color_util.color_util.color_RGB_to_hs(*state["color"])
+        self._brightness = ((int(state["brightness"])-1) * 83) + 41

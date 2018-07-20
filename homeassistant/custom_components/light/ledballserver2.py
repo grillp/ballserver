@@ -99,16 +99,16 @@ class LedBallLight2(Light):
 
     @property
     def effect_list(self) -> list:
-        """Return the list of supported effects."""
-        return self._effect_list
-
-    @property
-    def effect(self) -> str:
-        """Return the current effect."""
+        """Return the list of supported effects for this light."""
         return [
             SERVICE_EFFECT_COLORLOOP,
             SERVICE_EFFECT_STOP,
         ]
+
+    @property
+    def effect(self) -> str:
+        """Return the current effect."""
+        return self._effect
 
     @property
     def is_on(self) -> bool:

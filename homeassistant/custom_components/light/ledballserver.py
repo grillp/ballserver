@@ -21,7 +21,7 @@ PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend({
 SERVICE_EFFECT_COLORLOOP = 'balllight_effect_colorloop'
 SERVICE_EFFECT_STOP = 'balllight_effect_stop'
 
-SUPPORT_LEDBALL = (SUPPORT_BRIGHTNESS | SUPPORT_RGB_COLOR | SUPPORT_EFFECT)
+SUPPORT_LEDBALL = (SUPPORT_BRIGHTNESS | SUPPORT_COLOR | SUPPORT_EFFECT)
 BYTE_MAX = 255
 
 def setup_platform(hass, config, add_devices, discovery_info=None):

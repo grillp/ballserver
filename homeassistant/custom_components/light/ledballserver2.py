@@ -67,7 +67,7 @@ class LedBallLight2(Light):
     @property
     def should_poll(self) -> bool:
         """No polling needed for a demo light."""
-        return False
+        return True
 
     @property
     def name(self) -> str:

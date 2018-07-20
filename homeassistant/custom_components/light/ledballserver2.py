@@ -61,7 +61,7 @@ class LedBallLight2(Light):
         self._name = "LED Ball Light " + str(id)
         self._state = False
         self._brightness = None
-        self._hs_color = color_util.color_RGB_to_hs([0,0,0])
+        self._hs_color = color_util.color_RGB_to_hs(0,0,0)
         self._effect = None
 
     @property

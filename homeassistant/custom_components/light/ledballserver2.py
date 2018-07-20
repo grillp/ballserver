@@ -195,5 +195,5 @@ class LedBallLight2(Light):
         _LOGGER.debug("update %s", self._name)
         state = json.loads(self.send_command("state"))
         self._state = (state["state"] == "ON")
-        self.self._hs_color = color_util.color_util.color_RGB_to_hs(*state["color"])
+        self.self._hs_color = color_util.color_RGB_to_hs(*state["color"])
         self._brightness = ((int(state["brightness"])-1) * 83) + 41

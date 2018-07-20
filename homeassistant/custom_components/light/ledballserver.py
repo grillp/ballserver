@@ -5,11 +5,12 @@ import http.client
 import json
 
 # Import the device class from the component that you want to support
-from homeassistant.components.light import (ATTR_BRIGHTNESS, ATTR_RGB_COLOR, ATTR_EFFECT,
+from homeassistant.components.light import (ATTR_BRIGHTNESS, ATTR_HS_COLOR, ATTR_EFFECT,
                                             SUPPORT_BRIGHTNESS, SUPPORT_EFFECT, SUPPORT_COLOR,
                                             Light, PLATFORM_SCHEMA)
 from homeassistant.const import CONF_HOSTS
 import homeassistant.helpers.config_validation as cv
+import homeassistant.util.color as color_util
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -57,7 +58,7 @@ class LedBallLight(Light):
         self._name = "LED Ball Light " + str(id)
         self._state = False
         self._brightness = None
-        self._rgb = [0,0,0]
+        self._hs_color = color_util.color_RGB_to_hs(0,0,0)
         self._effect = None
 
     @property
@@ -89,8 +90,8 @@ class LedBallLight(Light):
         return self._effect
 
     @property
-    def rgb_color(self):
-        return self._rgb
+    def hs_color(self):
+        return self._hs_color
 
     @property
     def is_on(self):
@@ -108,16 +109,16 @@ class LedBallLight(Light):
         conn.close()
         return data.decode('utf-8')
 
-    def send_brightness_command(self, brightness):
+    def send_brightness_command(self):
         # 3 Bightness Levels. 1-3
         # divided in 3 ranges
-        l = (brightness / (256 / 3)) + 1
+        l = (self._brightness / (256 / 3)) + 1
         command = "brightness?l="+str(int(l))
         return self.send_command(command)
 
 
-    def send_color_command(self, color):
-        r,g,b = [_ for _ in color]
+    def send_color_command(self):
+        r,g,b = [_ for _ in color_util.color_hs_to_RGB(*self._hs_color)]
         command = "color?c=("+str(r)+","+str(g)+","+str(b)+")"
         return self.send_command(command)
 
@@ -132,15 +133,15 @@ class LedBallLight(Light):
         self.send_command("on")
 
         if ATTR_BRIGHTNESS in kwargs:
-            brightness = kwargs[ATTR_BRIGHTNESS]
-            _LOGGER.debug("turn_on %s : brightness=%s", self._name, brightness)
-            self.send_brightness_command(brightness);
+            self._brightness = kwargs[ATTR_BRIGHTNESS]
+            _LOGGER.debug("turn_on %s : brightness=%s", self._name, self._brightness)
+            self.send_brightness_command();
 
-        if ATTR_RGB_COLOR in kwargs:
-            color_rgb=kwargs[ATTR_RGB_COLOR]
-            _LOGGER.debug("turn_on %s : color=%s", self._name, color_rgb)
+        if ATTR_HS_COLOR in kwargs:
+            self._hs_color=kwargs[ATTR_HS_COLOR]
+            _LOGGER.debug("turn_on %s : color=%s", self._name, self._hs_color)
             self._effect = None
-            self.send_color_command(color_rgb);
+            self.send_color_command();
 
         if ATTR_EFFECT in kwargs:
             effect = kwargs.get(ATTR_EFFECT)
@@ -149,9 +150,9 @@ class LedBallLight(Light):
             if effect == SERVICE_EFFECT_COLORLOOP:
                 self.send_cycle_command();
             else:
-                _LOGGER.debug("turn_on %s : resetting color=%s", self._name,self._rgb)
+                _LOGGER.debug("turn_on %s : resetting color=%s", self._name,self._hs_color)
                 self._effect = None
-                self.send_color_command(self._rgb)
+                self.send_color_command()
 
     def turn_off(self, **kwargs):
         """Instruct the light to turn off."""
@@ -165,5 +166,5 @@ class LedBallLight(Light):
         _LOGGER.debug("update %s", self._name)
         state = json.loads(self.send_command("state"))
         self._state = (state["state"] == "ON")
-        self._rgb = state["color"]
+        self._hs_color = color_util.color_RGB_to_hs(*state["color"])
         self._brightness = ((int(state["brightness"])-1) * 83) + 41

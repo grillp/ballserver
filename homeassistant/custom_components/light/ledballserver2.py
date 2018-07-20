@@ -57,7 +57,7 @@ class LedBallLight2(Light):
     def __init__(self, host, id):
         """Initialize an LED Ball Light."""
         self._host = host
-        self._id = id
+        self._unique_id = id
         self._name = "LED Ball Light " + str(id)
         self._state = False
         self._brightness = None

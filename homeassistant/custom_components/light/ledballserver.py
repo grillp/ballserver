@@ -100,7 +100,7 @@ class LedBallLight(Light):
         return self._state
 
     def send_command(self, command):
-        _LOGGER.debug("host %s; http://%s/%s", self._host, self._name, command)
+        _LOGGER.debug("host %s; http://%s/%s", self._name, self._host, command)
         conn = http.client.HTTPConnection(self._host)
         conn.request("GET", "/" + command)
         response = conn.getresponse()

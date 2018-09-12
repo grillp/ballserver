@@ -96,11 +96,11 @@ class LedBallLight(Light):
     @property
     def is_on(self):
         """Return true if light is on."""
-        _LOGGER.debug("is_on %s", self._state)
+        _LOGGER.debug("host %s: is_on %s", self._name, self._state)
         return self._state
 
     def send_command(self, command):
-        _LOGGER.debug("host %s: CMD: %s", self._name, command)
+        _LOGGER.debug("host %s; http://%s/%s", self._host, self._name, command)
         conn = http.client.HTTPConnection(self._host)
         conn.request("GET", "/" + command)
         response = conn.getresponse()

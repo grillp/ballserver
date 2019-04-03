@@ -102,11 +102,17 @@ class LedBallLight(Light):
     def send_command(self, command):
         _LOGGER.debug("host %s; http://%s/%s", self._name, self._host, command)
         conn = http.client.HTTPConnection(self._host)
-        conn.request("GET", "/" + command)
-        response = conn.getresponse()
-        data = response.read()
-        _LOGGER.debug("host %s: RSP: %s", self._name, data)
-        conn.close()
+        try:
+            conn.request("GET", "/" + command)
+            response = conn.getresponse()
+            data = response.read()
+            _LOGGER.debug("host %s: RSP: %s", self._name, data)
+            response.close()
+        except ConnectionError as e:
+            _LOGGER.debug("host %s: Exception", self._name, e.strerror)
+        finally:
+            conn.close()
+
         return data.decode('utf-8')
 
     def send_brightness_command(self):

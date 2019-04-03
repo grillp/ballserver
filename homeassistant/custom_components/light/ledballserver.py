@@ -60,6 +60,7 @@ class LedBallLight(Light):
         self._brightness = None
         self._hs_color = color_util.color_RGB_to_hs(0,0,0)
         self._effect = None
+        self._last_good_result = "{\"state\":\"OFF\"}"
 
     @property
     def effect_list(self):
@@ -105,15 +106,15 @@ class LedBallLight(Light):
         try:
             conn.request("GET", "/" + command)
             response = conn.getresponse()
-            data = response.read()
-            _LOGGER.debug("host %s: RSP: %s", self._name, data)
+            self._last_good_result = response.read().decode('utf-8')
+            _LOGGER.debug("host %s: RSP: %s", self._name, self._last_good_result)
             response.close()
         except OSError as e:
             _LOGGER.error("host %s: Exception: %s", self._name, e.strerror)
         finally:
             conn.close()
 
-        return data.decode('utf-8')
+        return self._last_good_result
 
     def send_brightness_command(self):
         # 3 Bightness Levels. 1-3
@@ -172,5 +173,6 @@ class LedBallLight(Light):
         _LOGGER.debug("update %s", self._name)
         state = json.loads(self.send_command("state"))
         self._state = (state["state"] == "ON")
-        self._hs_color = color_util.color_RGB_to_hs(*state["color"])
-        self._brightness = ((int(state["brightness"])-1) * 83) + 41
+        if (self._state):
+            self._hs_color = color_util.color_RGB_to_hs(*state["color"])
+            self._brightness = ((int(state["brightness"])-1) * 83) + 41

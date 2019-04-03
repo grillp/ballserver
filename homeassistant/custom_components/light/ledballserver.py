@@ -109,7 +109,7 @@ class LedBallLight(Light):
             _LOGGER.debug("host %s: RSP: %s", self._name, data)
             response.close()
         except ConnectionError as e:
-            _LOGGER.debug("host %s: Exception", self._name, e.strerror)
+            _LOGGER.error("host %s: Exception", self._name, e.strerror)
         finally:
             conn.close()
 

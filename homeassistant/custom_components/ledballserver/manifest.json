@@ -1,0 +1,8 @@
+{
+  "domain": "ledballserver",
+  "name": "Gil's LED Ball Server",
+  "documentation": "None",
+  "dependencies": [],
+  "codeowners": ["@grillp"],
+  "requirements": []
+}

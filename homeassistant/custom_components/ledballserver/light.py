@@ -1,7 +1,7 @@
 import logging
 
 import voluptuous as vol
-import http.client
+import requests
 import json
 
 # Import the device class from the component that you want to support
@@ -102,17 +102,12 @@ class LedBallLight(Light):
 
     def send_command(self, command):
         _LOGGER.debug("host %s; http://%s/%s", self._name, self._host, command)
-        conn = http.client.HTTPConnection(self._host)
         try:
-            conn.request("GET", "/" + command)
-            response = conn.getresponse()
-            self._last_good_result = response.read().decode('utf-8')
-            _LOGGER.debug("host %s: RSP: %s", self._name, self._last_good_result)
-            response.close()
+            r = requests.get("http://"+self._host+"/"+command)
+            self._last_good_result = r.text
+            _LOGGER.debug("host %s: RSP: %s", self._name, r.text)
         except OSError as e:
-            _LOGGER.error("host %s: Exception: %s", self._name, e.strerror)
-        finally:
-            conn.close()
+            _LOGGER.error("host %s: Exception: %s", self._name, str(e))
 
         return self._last_good_result
 
